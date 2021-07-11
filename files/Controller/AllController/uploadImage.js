@@ -58,7 +58,13 @@ const imageUpload={
         req.body.title=req.body.title||perviousData.title
         req.body.description=req.body.description||perviousData.description
         req.body.is_private=req.body.is_private||perviousData.is_private
-        let updatedImages=await imageModel.findByIdAndUpdate({_id:imageId,userId:mongoose.Types.ObjectId(req.userId)},{$set:{...req.body,imageUrl:req.result}},{new:true})
+        let updatedImages=await imageModel.findOneAndUpdate({_id:imageId,userId:mongoose.Types.ObjectId(req.userId)},{$set:{...req.body,imageUrl:req.result}},{new:true})
+        if(updatedImages==null){
+            return resp.json({
+                data:{},
+                err:{msg:"PLEASE PROVIDE A VALID IMAGE ID"}
+            })
+        }
         return resp.json({
             updatedImages
         })
@@ -73,6 +79,12 @@ const imageUpload={
     deleteImage:async(req,resp)=>{
         try{
         let deleted=await imageModel.findOneAndDelete({_id:req.params.id,userId:mongoose.Types.ObjectId(req.userId)})
+        if(deleted==null){
+            return resp.json({
+                data:[],
+                err:{msg:"please povide a valid image id"}
+            })
+        }
         return resp.json({
             data:[deleted],
             err:{}
