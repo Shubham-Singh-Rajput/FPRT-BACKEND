@@ -5,7 +5,7 @@ mongooseConnection()
 const express=require('express')
 const fileUpload=require("express-fileupload")
 const cors=require('cors')
-const PORT=2000||process.env.PORT||2000
+const PORT=process.env.PORT||2000
 const app=express()
 app.use(cors())
 app.use(express.json())
@@ -15,6 +15,10 @@ app.use(fileUpload({
 }))
 
 app.use(route)
+app.use((req,resp,next)=>{
+    const err=new Error("PAGE NOT FOUND")
+    next(err)
+})
 app.use((err,req,resp,next)=>{
     return resp.json({
         data:[],

@@ -15,7 +15,7 @@ const imageSchema=mongoose.Schema({
     },
     is_private:{
         type:String,
-        default:"public"
+        required:[true,'please enter public or private']
     },
     imageUrl:{
         type:String,
